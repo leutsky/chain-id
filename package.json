@@ -1,0 +1,20 @@
+{
+  "name": "chain-id",
+  "version": "1.0.0",
+  "author": "Alexander Leutsky",
+  "keywords": [
+    "test-id", "testing-id", "data-test-id", "test", "testing", "chain", "identifier"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "index.d.ts"
+  ],
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "26.6.3"
+  }
+}
