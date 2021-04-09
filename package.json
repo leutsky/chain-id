@@ -3,7 +3,13 @@
   "version": "1.0.0",
   "author": "Alexander Leutsky",
   "keywords": [
-    "test-id", "testing-id", "data-test-id", "test", "testing", "chain", "identifier"
+    "test-id",
+    "testing-id",
+    "data-test-id",
+    "test",
+    "testing",
+    "chain",
+    "identifier"
   ],
   "license": "MIT",
   "main": "index.js",
@@ -11,10 +17,15 @@
     "index.js",
     "index.d.ts"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leutsky/chain-id.git"
+  },
   "scripts": {
     "test": "jest"
   },
   "devDependencies": {
     "jest": "26.6.3"
-  }
+  },
+  "dependencies": {}
 }

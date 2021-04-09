@@ -61,7 +61,7 @@ function createId2p() {
   const slaveProxy = new Proxy(simpleObject, {
     get(target, p, receiver) {
       if (p === 'toString' || p === Symbol.toPrimitive) {
-        return (hint) => {
+        return () => {
           return 'str';
         };
       }
