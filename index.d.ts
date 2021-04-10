@@ -9,5 +9,4 @@ type RecursiveRecord = {
 
 export function createId<T = RecursiveRecord>(options?: Options): T;
 
-export function enrich<T = RecursiveRecord>(target: T, options?: Options): T;
-
+export function createIdFromScheme<T = RecursiveRecord>(scheme: T, options?: Options): T;

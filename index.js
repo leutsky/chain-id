@@ -2,8 +2,8 @@ function isObject(target) {
   return Object.prototype.toString.call(target) === '[object Object]';
 }
 
-function isStringOrNumber(target) {
-  return typeof target === 'string' || typeof target === 'number';
+function canConcatLeafValue(target) {
+  return (typeof target === 'string' && target !== '') || typeof target === 'number';
 }
 
 function makePath(path, key, separator) {
@@ -60,7 +60,7 @@ function attachPath(target, path) {
   });
 }
 
-function enrich(target, options) {
+function createIdFromScheme(sourceScheme, options) {
   options = options || {};
   var prefix = options.prefix || '';
   var separator = options.separator || '-';
@@ -72,7 +72,7 @@ function enrich(target, options) {
         nextPath = makePath(path, key, separator);
         result[key] = prepare({}, scheme[key], nextPath);
       } else {
-        pathPart = isStringOrNumber(scheme[key]) ? key + separator + String(scheme[key]) : key;
+        pathPart = canConcatLeafValue(scheme[key]) ? key + separator + String(scheme[key]) : key;
         nextPath = makePath(path, pathPart, separator);
         result[key] = {};
       }
@@ -83,10 +83,10 @@ function enrich(target, options) {
     return result;
   }
 
-  return prepare({}, target, prefix);
+  return prepare({}, sourceScheme, prefix);
 }
 
 module.exports = {
   createId,
-  enrich
+  createIdFromScheme
 };

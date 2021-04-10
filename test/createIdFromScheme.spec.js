@@ -1,4 +1,4 @@
-const {enrich} = require('../index');
+const {createIdFromScheme} = require('../index');
 
 function getScheme() {
   return {
@@ -21,15 +21,16 @@ function getScheme() {
   }
 }
 
-describe('enrich', () => {
+describe('createIdFromScheme', () => {
   describe('With default options', () => {
     test('equal', () => {
-      const id = enrich(getScheme());
+      const id = createIdFromScheme(getScheme());
       [
         [id.a, 'a'],
         [id.a.a1, 'a-a1'],
         [id.a.a1.a12.a121, 'a-a1-a12-a121-0'],
         [id.a.a1.a12.a122, 'a-a1-a12-a122-end2'],
+        [id.a.a2.a21, 'a-a2-a21'],
         [id.b, 'b'],
         [id.b.b2, 'b-b2-end3'],
       ].forEach(([id, expected]) => expect(String(id)).toEqual(expected));
@@ -38,7 +39,7 @@ describe('enrich', () => {
 
   describe('With custom options', () => {
     test('equal', () => {
-      const id = enrich(getScheme(), {prefix: 'id', separator: '.'});
+      const id = createIdFromScheme(getScheme(), {prefix: 'id', separator: '.'});
       [
         [id.a, 'id.a'],
         [id.a.a1, 'id.a.a1'],
