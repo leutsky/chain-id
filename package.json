@@ -1,7 +1,7 @@
 {
   "name": "chain-id",
   "description": "Chain Id allow you to generate unique identifiers from an object's properties chain.",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "author": "Alexander Leutsky",
   "keywords": [
     "test-id",
