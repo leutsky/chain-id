@@ -50,4 +50,16 @@ describe('createIdFromScheme', () => {
       ].forEach(([id, expected]) => expect(String(id)).toEqual(expected));
     });
   });
+
+  describe('Non-existing properties', () => {
+    test('Property does not exist in the object', () => {
+      const id = createIdFromScheme(getScheme());
+      expect(id.a.p).toBeUndefined();
+    });
+
+    test('Cannot read property of undefined', () => {
+      const id = createIdFromScheme(getScheme());
+      expect(() => id.a.p.err).toThrow();
+    });
+  })
 });

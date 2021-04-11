@@ -5,7 +5,7 @@ from an object's properties chain.
 
 There are two methods to initialize chain id: **createId** and **createIdFromScheme**
 
-### createId(options?)
+## createId(options?)
 
 **createId** initialize infinity chain id. This method uses Proxy inside.
 
@@ -22,7 +22,7 @@ You can of course use createId without TypeScript if you want.
 import {createId} from 'chain-id';
 
 type TestId = {
-  sighInForm: {
+  signInForm: {
     field: {
       email: any;
       password: any;
@@ -36,26 +36,28 @@ const testId = createId<TestId>();
 // React component
 function Component() {
   return (
-    <form data-test-id={`${testId.sighInForm}`}>
-      <input name="email" type="text" data-test-id={`${testId.sighInForm.field.email}`} />
-      <input name="password" type="password" data-test-id={`${testId.sighInForm.field.password}`} />
-      <button type="submit" data-test-id={`${testId.sighInForm.submitButton}`}>Sign In</button>
+    <form data-test-id={`${testId.signInForm}`}>
+      <input name="email" type="text" data-test-id={`${testId.signInForm.field.email}`} />
+      <input name="password" type="password" data-test-id={`${testId.signInForm.field.password}`} />
+      <button type="submit" data-test-id={`${testId.signInForm.submitButton}`}>Sign In</button>
     </form>
   );
 }
 ```
 **Output html**
 ```html
-<form data-test-id="sighInForm">
-  <input name="email" type="text" data-test-id="sighInForm-field-email" />
-  <input name="password" type="password" data-test-id="sighInForm-field-password" />
-  <button type="submit" data-test-id="sighInForm-submitButton">Sign In</button>
+<form data-test-id="signInForm">
+  <input name="email" type="text" data-test-id="signInForm-field-email" />
+  <input name="password" type="password" data-test-id="signInForm-field-password" />
+  <button type="submit" data-test-id="signInForm-submitButton">Sign In</button>
 </form>
 ```
 
-### createIdFromScheme(scheme, options?)
+## createIdFromScheme(scheme, options?)
 
-**createIdFromScheme** is recommended for use when:
+***Attention!*** **createIdFromScheme** is experimental tool.
+
+**createIdFromScheme** is helpful when:
 - You use vanila JS
 - You don't have type checking
 - You need control over the correctness of the properties chains
@@ -67,7 +69,7 @@ function Component() {
 import {createIdFromScheme} from 'chain-id';
 
 const scheme = {
-  sighInForm: {
+  signInForm: {
     field: {
       email: '',
       password: ''
@@ -79,10 +81,13 @@ const scheme = {
 const testId = createIdFromScheme(scheme);
 
 // Correct usage
-console.log(testId.sighInForm.field.email); // -> sighInForm-field-email
+console.log(testId.signInForm.field.email); // -> "signInForm-field-email"
+
+// Return undefined
+console.log(testId.signInForm.field.age); // -> undefined
 
 // Runtime error
-console.log(testId.sighInForm.field.age);
+console.log(testId.signInForm.head.title); // -> throw error because head is undefined
 ```
 
 ### Options
