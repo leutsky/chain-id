@@ -1,5 +1,15 @@
+var PATH_PROPERTY = '$$id';
+
 function isObject(target) {
   return Object.prototype.toString.call(target) === '[object Object]';
+}
+
+function prepareKeysBlacklistOption(blacklist) {
+  var blacklist = Array.isArray(blacklist) ? blacklist : [];
+  return blacklist.reduce((result, key) => {
+    result[key] = true;
+    return result;
+  }, {});
 }
 
 function canConcatLeafValue(target) {
@@ -14,14 +24,29 @@ function createId(options) {
   options = options || {};
   var prefix = options.prefix || '';
   var separator = options.separator || '-';
+  var keysBlacklist = prepareKeysBlacklistOption(options.keysBlacklist);
 
   function createProxy(obj, path) {
+    Object.defineProperty(obj, PATH_PROPERTY, {
+      value: path,
+      writable: false,
+      enumerable: true,
+    });
+
     return new Proxy(obj, {
       get(target, key) {
         if (key === Symbol.toPrimitive || key === 'toString') {
           return function () {
             return path;
           }
+        }
+
+        if (typeof key === 'symbol') {
+          return undefined;
+        }
+
+        if (key in keysBlacklist) {
+          return undefined;
         }
 
         if (key in target) {
@@ -45,17 +70,20 @@ function attachPath(target, path) {
   };
 
   Object.defineProperties(target, {
+    [PATH_PROPERTY]: {
+      value: path,
+      writable: false,
+      enumerable: true,
+    },
     toString: {
       value: getPath,
       writable: false,
       enumerable: false,
-      configurable: false
     },
     [Symbol.toPrimitive]: {
       value: getPath,
       writable: false,
       enumerable: false,
-      configurable: false
     }
   });
 }
@@ -86,7 +114,10 @@ function createIdFromScheme(sourceScheme, options) {
   return prepare({}, sourceScheme, prefix);
 }
 
+var REACT_KEYS_BLACKLIST = ['$$typeof'];
+
 module.exports = {
+  REACT_KEYS_BLACKLIST,
   createId,
   createIdFromScheme
 };
