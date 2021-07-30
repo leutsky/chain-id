@@ -1,16 +1,16 @@
-type KeysBlacklist = Array<string>;
+type IgnoredKeys = Array<string>;
 
 type Options = {
   prefix?: string;
   separator?: string;
-  keysBlacklist?: KeysBlacklist;
+  ignoreKeys?: IgnoredKeys;
 };
 
 type RecursiveRecord = {
   [key: string]: RecursiveRecord;
 };
 
-export declare const REACT_KEYS_BLACKLIST: KeysBlacklist;
+export declare const REACT_IGNORED_KEYS: IgnoredKeys;
 
 export function createId<T = RecursiveRecord>(options?: Options): T;
 

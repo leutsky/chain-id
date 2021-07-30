@@ -4,9 +4,8 @@ function isObject(target) {
   return Object.prototype.toString.call(target) === '[object Object]';
 }
 
-function prepareKeysBlacklistOption(blacklist) {
-  var blacklist = Array.isArray(blacklist) ? blacklist : [];
-  return blacklist.reduce((result, key) => {
+function prepareIgnoreKeysOption(ignoreKeys) {
+  return (Array.isArray(ignoreKeys) ? ignoreKeys : []).reduce((result, key) => {
     result[key] = true;
     return result;
   }, {});
@@ -24,7 +23,7 @@ function createId(options) {
   options = options || {};
   var prefix = options.prefix || '';
   var separator = options.separator || '-';
-  var keysBlacklist = prepareKeysBlacklistOption(options.keysBlacklist);
+  var ignoredKeys = prepareIgnoreKeysOption(options.ignoreKeys);
 
   function createProxy(obj, path) {
     Object.defineProperty(obj, PATH_PROPERTY, {
@@ -45,7 +44,7 @@ function createId(options) {
           return undefined;
         }
 
-        if (key in keysBlacklist) {
+        if (key in ignoredKeys) {
           return undefined;
         }
 
@@ -114,10 +113,10 @@ function createIdFromScheme(sourceScheme, options) {
   return prepare({}, sourceScheme, prefix);
 }
 
-var REACT_KEYS_BLACKLIST = ['$$typeof'];
+var REACT_IGNORED_KEYS = ['$$typeof'];
 
 module.exports = {
-  REACT_KEYS_BLACKLIST,
+  REACT_IGNORED_KEYS,
   createId,
   createIdFromScheme
 };
