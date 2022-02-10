@@ -1,9 +1,9 @@
 export type DialogCloseHandler = () => void;
 
 export type DialogTestId = {
-  title: unknown;
-  content: unknown;
-  actions: unknown;
+  title: string;
+  content: string;
+  actions: string;
 };
 
 export type DialogInterface = {

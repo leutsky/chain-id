@@ -1,7 +1,7 @@
 import React from 'react';
-import {TestIdProp} from 'lib/testing';
+import type {TestIdProp} from 'lib/testing';
 
-export type InputTestId = unknown;
+export type InputTestId = string;
 
 export type InputProps = TestIdProp<InputTestId> &
   JSX.IntrinsicElements['input'];

@@ -1,20 +1,24 @@
-import {TestIdProp} from 'lib/testing';
+import type {TestIdProp} from 'lib/testing';
 import React from 'react';
 import cn from 'clsx';
 
 import './index.scss';
 
-export type ButtonTestId = unknown;
+export type ButtonTestId = {
+  label: string;
+};
 
 type Props = TestIdProp<ButtonTestId> &
-  Pick<JSX.IntrinsicElements['button'], 'form' | 'onClick' | 'type'> & {
+  Pick<JSX.IntrinsicElements['button'], 'disabled' | 'form' | 'type'> & {
     appearance?: 'text' | 'filled' | 'dialogAction';
     children: React.ReactNode;
+    onClick?: () => void;
   };
 
 export function Button({
   appearance = 'filled',
   children,
+  disabled,
   form,
   onClick,
   testId,
@@ -28,12 +32,15 @@ export function Button({
         appearance === 'dialogAction' && 'mdc-dialog__button',
       )}
       data-test-id={testId}
+      disabled={disabled}
       form={form}
-      onClick={onClick}
+      onClick={onClick ? () => onClick() : undefined}
       type={type}
     >
       <span className="mdc-button__ripple" />
-      <span className="mdc-button__label">{children}</span>
+      <span className="mdc-button__label" data-test-id={testId?.label}>
+        {children}
+      </span>
     </button>
   );
 }

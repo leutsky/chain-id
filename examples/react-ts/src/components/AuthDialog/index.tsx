@@ -6,40 +6,97 @@ import {
   DialogActions,
   DialogTestId,
 } from 'components/Dialog';
-import {TextField, TextFieldTestId} from 'components/TextField';
-import {TestIdProp} from 'lib/testing';
-import React from 'react';
+import {TextField, TextFieldTestId, ChangeHandler} from 'components/TextField';
+import type {TestIdProp} from 'lib/testing';
+import React, {useCallback, useState} from 'react';
 
 import styles from './index.module.scss';
+
+export type SignInData = {
+  username: string;
+  password: string;
+};
+
+type SignInErrors = {
+  username?: React.ReactNode;
+  password?: React.ReactNode;
+};
+
+export type SignInHandler = (data: SignInData) => void;
 
 export type AuthDialogTestId = {
   dialog: DialogTestId;
   usernameField: TextFieldTestId;
   passwordField: TextFieldTestId;
   cancelButton: ButtonTestId;
-  signInButton: ButtonTestId;
+  submitButton: ButtonTestId;
 };
 
 type Props = TestIdProp<AuthDialogTestId> & {
-  onClose?: () => void;
+  onClose: () => void;
+  onSignIn: SignInHandler;
 };
 
-export function AuthDialog({onClose, testId}: Props): React.ReactElement {
+export function AuthDialog({
+  onClose,
+  onSignIn,
+  testId,
+}: Props): React.ReactElement {
+  const [credential, setCredential] = useState<SignInData>(() => ({
+    username: '',
+    password: '',
+  }));
+  const [errors, setErrors] = useState<SignInErrors>(() => ({}));
+
+  const handleInputChange = useCallback<ChangeHandler>((data) => {
+    setCredential((prevCredential) => ({
+      ...prevCredential,
+      [data.name]: data.value,
+    }));
+  }, []);
+
+  const handleSubmit = useCallback(() => {
+    const validationErrors: SignInErrors = {};
+    let withErrors = false;
+
+    if (!credential.username) {
+      validationErrors.username = 'Username is required';
+      withErrors = true;
+    }
+
+    if (!credential.password) {
+      validationErrors.password = 'Password is required';
+      withErrors = true;
+    }
+
+    if (withErrors) {
+      setErrors(validationErrors);
+    } else {
+      onSignIn(credential);
+    }
+  }, [credential, onSignIn]);
+
   return (
     <Dialog onClose={onClose} testId={testId?.dialog}>
       <DialogTitle>Sign In</DialogTitle>
       <DialogContent>
         <div className={styles.layout}>
           <TextField
+            error={errors.username}
             label="Username"
             name="username"
+            onChange={handleInputChange}
             testId={testId?.usernameField}
+            value={credential.username}
           />
           <TextField
+            error={errors.password}
             label="Password"
             name="password"
-            type="password"
+            onChange={handleInputChange}
             testId={testId?.passwordField}
+            type="password"
+            value={credential.password}
           />
         </div>
       </DialogContent>
@@ -51,7 +108,11 @@ export function AuthDialog({onClose, testId}: Props): React.ReactElement {
         >
           Cancel
         </Button>
-        <Button appearance="dialogAction" testId={testId?.signInButton}>
+        <Button
+          appearance="dialogAction"
+          onClick={handleSubmit}
+          testId={testId?.submitButton}
+        >
           Sign In
         </Button>
       </DialogActions>

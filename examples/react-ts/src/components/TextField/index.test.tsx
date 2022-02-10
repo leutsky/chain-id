@@ -1,19 +1,24 @@
-import {createId} from 'chain-id';
 import React from 'react';
-import {render, configure} from '@testing-library/react';
+import {createTestId, render} from 'lib/testing';
 
 import {TextField, TextFieldTestId} from './index';
 
-configure({testIdAttribute: 'data-test-id'});
-const testId = createId<TextFieldTestId>();
+const testId = createTestId<TextFieldTestId>();
 
 describe('TextField', () => {
   test('check label', () => {
     const labelText = 'Label text';
-    const {getByTestId} = render(<TextField label={labelText} testId={testId} />);
+    const {getByTestId} = render(
+      <TextField
+        label={labelText}
+        name="field"
+        onChange={() => {}}
+        testId={testId}
+        value=""
+      />,
+    );
+    const labelElement = getByTestId(testId.label);
 
-    const label = getByTestId(String(testId.label));
-
-    expect(label).toHaveTextContent(labelText);
+    expect(labelElement).toHaveTextContent(labelText);
   });
 });
