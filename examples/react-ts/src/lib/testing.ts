@@ -32,6 +32,16 @@ function getByTestId(
   return originalQueries.getByTestId(container, normalizedId, options);
 }
 
+function queryByTestId(
+  container: HTMLElement,
+  id: Matcher,
+  options?: MatcherOptions,
+): ReturnType<typeof originalQueries.queryByTestId> {
+  const normalizedId =
+    isMatcherFunction(id) || id instanceof RegExp ? id : String(id);
+  return originalQueries.queryByTestId(container, normalizedId, options);
+}
+
 export function render(
   ui: ReactElement,
   options?: Omit<RenderOptions, 'queries'>,
@@ -41,6 +51,11 @@ export function render(
     queries: {
       ...originalQueries,
       getByTestId,
+      queryByTestId,
     },
   });
+}
+
+export function dummyFn() {
+  return;
 }

@@ -11,20 +11,22 @@ export type TextFieldTestId = {
   label: string;
 };
 
-type ChangeData = {
+export type TextFieldChangeEvent = {
   name: string;
   value: string;
 };
 
-export type ChangeHandler = (data: ChangeData) => void;
+export type TextFieldChangeHandler = (data: TextFieldChangeEvent) => void;
 
-type Props = TestIdProp<TextFieldTestId> & {
+export type TextFieldType = 'text' | 'password';
+
+export type TextFieldProps = TestIdProp<TextFieldTestId> & {
   disabled?: boolean;
   error?: React.ReactNode;
   label: React.ReactNode;
   name: string;
-  onChange: ChangeHandler;
-  type?: 'text' | 'password';
+  onChange: TextFieldChangeHandler;
+  type?: TextFieldType;
   value: string;
 };
 
@@ -37,7 +39,7 @@ export function TextField({
   testId,
   type = 'text',
   value,
-}: Props): React.ReactElement {
+}: TextFieldProps): React.ReactElement {
   const [focused, setFocused] = useState(false);
   const errorVisible = !!error;
   const filled = !!value;

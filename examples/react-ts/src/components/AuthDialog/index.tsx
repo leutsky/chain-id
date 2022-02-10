@@ -6,7 +6,7 @@ import {
   DialogActions,
   DialogTestId,
 } from 'components/Dialog';
-import {TextField, TextFieldTestId, ChangeHandler} from 'components/TextField';
+import {TextField, TextFieldTestId, TextFieldChangeHandler} from 'components/TextField';
 import type {TestIdProp} from 'lib/testing';
 import React, {useCallback, useState} from 'react';
 
@@ -48,7 +48,7 @@ export function AuthDialog({
   }));
   const [errors, setErrors] = useState<SignInErrors>(() => ({}));
 
-  const handleInputChange = useCallback<ChangeHandler>((data) => {
+  const handleInputChange = useCallback<TextFieldChangeHandler>((data) => {
     setCredential((prevCredential) => ({
       ...prevCredential,
       [data.name]: data.value,
