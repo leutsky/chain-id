@@ -1,22 +1,25 @@
 import {TestIdProp} from 'lib/testing';
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 
 import {DialogContext} from './contexts';
 import './index.scss';
-import {DialogCloseHandler, DialogTestId} from './types';
+import {DialogProps, DialogTestId} from './types';
 
 export type {DialogTestId};
 export {Actions as DialogActions} from './Actions';
 export {Content as DialogContent} from './Content';
 export {Title as DialogTitle} from './Title';
 
-type Props = TestIdProp<DialogTestId> & {
-  children: React.ReactNode;
-  onClose?: DialogCloseHandler;
-};
-
-export function Dialog({children, onClose, testId}: Props): React.ReactElement {
-  const dialogInterface = useMemo(() => ({onClose, testId}), [onClose, testId]);
+export function Dialog({
+  children,
+  onClose,
+  testId,
+}: DialogProps): React.ReactElement {
+  const handleClose = useMemo(() => onClose && (() => onClose()), [onClose]);
+  const dialogInterface = useMemo(
+    () => ({onClose: handleClose, testId}),
+    [handleClose, testId],
+  );
 
   return (
     <DialogContext.Provider value={dialogInterface}>
@@ -26,7 +29,11 @@ export function Dialog({children, onClose, testId}: Props): React.ReactElement {
             {children}
           </div>
         </div>
-        <div className="mdc-dialog__scrim" onClick={onClose} />
+        <div
+          className="mdc-dialog__scrim"
+          data-test-id={testId?.scrim}
+          onClick={handleClose}
+        />
       </div>
     </DialogContext.Provider>
   );

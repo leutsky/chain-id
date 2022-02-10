@@ -2,7 +2,13 @@ import React from 'react';
 import {createTestId, dummyFn, render} from 'lib/testing';
 import userEvent from '@testing-library/user-event';
 
-import {TextField, TextFieldProps, TextFieldTestId, TextFieldType, TextFieldChangeEvent} from './index';
+import {
+  TextField,
+  TextFieldProps,
+  TextFieldTestId,
+  TextFieldType,
+  TextFieldChangeEvent,
+} from './index';
 
 const testId = createTestId<TextFieldTestId>();
 
@@ -36,10 +42,14 @@ describe('TextField', () => {
       expect(getByTestId(testId.label)).toHaveTextContent(labelText);
     });
 
-    test('is node', () => {
-      const {getByTestId} = render(renderTextField({label: <span className="class">Label</span>}));
+    test('is html', () => {
+      const {getByTestId} = render(
+        renderTextField({label: <span className="class">Label</span>}),
+      );
 
-      expect(getByTestId(testId.label)).toContainHTML('<span class="class">Label</span>');
+      expect(getByTestId(testId.label)).toContainHTML(
+        '<span class="class">Label</span>',
+      );
     });
   });
 
@@ -49,13 +59,17 @@ describe('TextField', () => {
 
       expect(getByTestId(testId.input)).not.toHaveFocus();
       expect(getByTestId(testId.input)).toHaveValue();
-      expect(getByTestId(testId.label)).toHaveClass('mdc-floating-label--float-above');
+      expect(getByTestId(testId.label)).toHaveClass(
+        'mdc-floating-label--float-above',
+      );
 
       rerender(renderTextField({value: ''}));
 
       expect(getByTestId(testId.input)).not.toHaveFocus();
       expect(getByTestId(testId.input)).not.toHaveValue();
-      expect(getByTestId(testId.label)).not.toHaveClass('mdc-floating-label--float-above');
+      expect(getByTestId(testId.label)).not.toHaveClass(
+        'mdc-floating-label--float-above',
+      );
     });
 
     test('disabled', () => {
@@ -78,17 +92,23 @@ describe('TextField', () => {
 
       expect(fieldElement).toHaveClass('mdc-text-field--focused');
       expect(getByTestId(testId.input)).toHaveFocus();
-      expect(getByTestId(testId.label)).toHaveClass('mdc-floating-label--float-above');
+      expect(getByTestId(testId.label)).toHaveClass(
+        'mdc-floating-label--float-above',
+      );
 
       userEvent.tab();
 
       expect(getByTestId(testId)).not.toHaveClass('mdc-text-field--focused');
       expect(getByTestId(testId.input)).not.toHaveFocus();
-      expect(getByTestId(testId.label)).not.toHaveClass('mdc-floating-label--float-above');
+      expect(getByTestId(testId.label)).not.toHaveClass(
+        'mdc-floating-label--float-above',
+      );
     });
 
     test('error', () => {
-      const {getByTestId, queryByTestId, rerender} = render(renderTextField({error: 'Error'}));
+      const {getByTestId, queryByTestId, rerender} = render(
+        renderTextField({error: 'Error'}),
+      );
 
       expect(getByTestId(testId)).toHaveClass('mdc-text-field--invalid');
       expect(getByTestId(testId.error)).toBeInTheDocument();
@@ -108,10 +128,14 @@ describe('TextField', () => {
       expect(getByTestId(testId.error)).toHaveTextContent(errorText);
     });
 
-    test('is node', () => {
-      const {getByTestId} = render(renderTextField({error: <span className="class">Error</span>}));
+    test('is html', () => {
+      const {getByTestId} = render(
+        renderTextField({error: <span className="class">Error</span>}),
+      );
 
-      expect(getByTestId(testId.error)).toContainHTML('<span class="class">Error</span>');
+      expect(getByTestId(testId.error)).toContainHTML(
+        '<span class="class">Error</span>',
+      );
     });
   });
 
@@ -124,7 +148,7 @@ describe('TextField', () => {
 
     test.each<TextFieldType[]>([
       ['text', 'text'],
-      ['password', 'password']
+      ['password', 'password'],
     ])('%s', (type, expected) => {
       const {getByTestId} = render(renderTextField({type}));
 
@@ -174,8 +198,13 @@ describe('TextField', () => {
     test('clipboard', () => {
       const name = 'fieldName';
       const value = 'clipboard value';
-      const handleChange = jest.fn<TextFieldChangeEvent, [TextFieldChangeEvent]>();
-      const {getByTestId} = render(renderTextField({name, onChange: handleChange}));
+      const handleChange = jest.fn<
+        TextFieldChangeEvent,
+        [TextFieldChangeEvent]
+      >();
+      const {getByTestId} = render(
+        renderTextField({name, onChange: handleChange}),
+      );
 
       userEvent.paste(getByTestId(testId.input), value);
 
