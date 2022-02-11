@@ -5,10 +5,7 @@ import {
   DialogContent,
   DialogActions,
 } from 'components/Dialog';
-import {
-  TextField,
-  TextFieldChangeHandler,
-} from 'components/TextField';
+import {TextField, TextFieldChangeHandler} from 'components/TextField';
 import React, {useCallback, useState} from 'react';
 
 import {AuthDialogProps, SignInData} from './types';
