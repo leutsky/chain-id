@@ -1,4 +1,5 @@
-import {AuthDialog, SignInHandler} from 'components/AuthDialog';
+import {AuthDialog} from 'components/AuthDialog';
+import {SignInHandler} from 'components/AuthDialog/types';
 import {Button} from 'components/Button';
 import React, {useCallback, useState} from 'react';
 import {rootTestId} from 'testId';
@@ -9,7 +10,7 @@ export function App(): React.ReactElement {
   const [dialogOpened, setDialogOpened] = useState(false);
 
   const handleSignIn = useCallback<SignInHandler>(() => {
-    //
+    // do nothing
   }, []);
 
   return (

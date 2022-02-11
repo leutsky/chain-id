@@ -1,4 +1,4 @@
-import type {AuthDialogTestId} from 'components/AuthDialog';
+import type {AuthDialogTestId} from 'components/AuthDialog/types';
 import type {ButtonTestId} from 'components/Button';
 import {createTestId} from 'lib/testing';
 
