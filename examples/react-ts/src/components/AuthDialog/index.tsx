@@ -1,51 +1,29 @@
-import {Button, ButtonTestId} from 'components/Button';
+import {Button} from 'components/Button';
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  DialogTestId,
 } from 'components/Dialog';
 import {
   TextField,
-  TextFieldTestId,
   TextFieldChangeHandler,
 } from 'components/TextField';
-import type {TestIdProp} from 'lib/testing';
 import React, {useCallback, useState} from 'react';
 
+import {AuthDialogProps, SignInData} from './types';
 import styles from './index.module.scss';
-
-export type SignInData = {
-  username: string;
-  password: string;
-};
 
 type SignInErrors = {
   username?: React.ReactNode;
   password?: React.ReactNode;
 };
 
-export type SignInHandler = (data: SignInData) => void;
-
-export type AuthDialogTestId = {
-  dialog: DialogTestId;
-  usernameField: TextFieldTestId;
-  passwordField: TextFieldTestId;
-  cancelButton: ButtonTestId;
-  submitButton: ButtonTestId;
-};
-
-type Props = TestIdProp<AuthDialogTestId> & {
-  onClose: () => void;
-  onSignIn: SignInHandler;
-};
-
 export function AuthDialog({
   onClose,
   onSignIn,
   testId,
-}: Props): React.ReactElement {
+}: AuthDialogProps): React.ReactElement {
   const [credential, setCredential] = useState<SignInData>(() => ({
     username: '',
     password: '',
