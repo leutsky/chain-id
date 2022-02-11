@@ -1,0 +1,18 @@
+// @flow
+type IgnoredKeys = Array<string>;
+
+type Options = {
+  prefix?: string;
+  separator?: string;
+  ignoreKeys?: IgnoredKeys;
+};
+
+type RecursiveRecord = {
+  [key: string]: RecursiveRecord;
+};
+
+declare export var REACT_IGNORED_KEYS: IgnoredKeys;
+
+declare export function createId<T = RecursiveRecord>(options?: Options): T;
+
+declare export function createIdFromScheme<T = RecursiveRecord>(scheme: T, options?: Options): T;
