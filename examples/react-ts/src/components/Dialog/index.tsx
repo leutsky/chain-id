@@ -1,5 +1,4 @@
-import {TestIdProp} from 'lib/testing';
-import React, {useCallback, useMemo} from 'react';
+import React, {useMemo} from 'react';
 
 import {DialogContext} from './contexts';
 import './index.scss';
