@@ -1,5 +1,5 @@
 import React from 'react';
-import {render} from 'lib/testing';
+import {render, getElementByTestId, queryElementByTestId} from 'lib/testing';
 import userEvent from '@testing-library/user-event';
 
 import {rootTestId} from 'testId';
@@ -7,15 +7,21 @@ import {rootTestId} from 'testId';
 import {App} from './index';
 
 describe('App', () => {
-  test('open and close AuthDialog', () => {
-    const {getByTestId, queryByTestId} = render(<App />);
+  test('open and close AuthDialog', async () => {
+    render(<App />);
 
-    userEvent.click(getByTestId(rootTestId.signInButton));
+    await userEvent.click(getElementByTestId(rootTestId.signInButton));
 
-    expect(getByTestId(rootTestId.authDialog.dialog)).toBeInTheDocument();
+    expect(
+      getElementByTestId(rootTestId.authDialog.dialog),
+    ).toBeInTheDocument();
 
-    userEvent.click(getByTestId(rootTestId.authDialog.cancelButton));
+    await userEvent.click(
+      getElementByTestId(rootTestId.authDialog.cancelButton),
+    );
 
-    expect(queryByTestId(rootTestId.authDialog.dialog)).not.toBeInTheDocument();
+    expect(
+      queryElementByTestId(rootTestId.authDialog.dialog),
+    ).not.toBeInTheDocument();
   });
 });

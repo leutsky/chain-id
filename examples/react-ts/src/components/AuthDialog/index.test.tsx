@@ -1,5 +1,11 @@
 import React from 'react';
-import {createTestId, dummyFn, render} from 'lib/testing';
+import {
+  createTestId,
+  dummyFn,
+  render,
+  getElementByTestId,
+  queryElementByTestId,
+} from 'lib/testing';
 import userEvent from '@testing-library/user-event';
 
 import {AuthDialog} from './index';
@@ -8,75 +14,101 @@ import {AuthDialogTestId, SignInData} from './types';
 const testId = createTestId<AuthDialogTestId>();
 
 describe('AuthDialog', () => {
-  test('Click Cancel button', () => {
+  test('Click Cancel button', async () => {
     const onClose = jest.fn();
-    const {getByTestId} = render(
-      <AuthDialog onClose={onClose} onSignIn={dummyFn} testId={testId} />,
-    );
+    render(<AuthDialog onClose={onClose} onSignIn={dummyFn} testId={testId} />);
 
-    userEvent.click(getByTestId(testId.cancelButton));
+    await userEvent.click(getElementByTestId(testId.cancelButton));
 
     expect(onClose).toBeCalledTimes(1);
   });
 
   describe('Click Sign In button', () => {
-    test('when fields are empty', () => {
+    test('when fields are empty', async () => {
       const onSignIn = jest.fn<SignInData, [SignInData]>();
-      const {getByTestId} = render(
+      render(
         <AuthDialog onClose={dummyFn} onSignIn={onSignIn} testId={testId} />,
       );
 
-      userEvent.click(getByTestId(testId.submitButton));
+      await userEvent.click(getElementByTestId(testId.submitButton));
 
       expect(onSignIn).toBeCalledTimes(0);
-      expect(getByTestId(testId.usernameField.error)).toBeInTheDocument();
-      expect(getByTestId(testId.passwordField.error)).toBeInTheDocument();
+      expect(
+        getElementByTestId(testId.usernameField.error),
+      ).toBeInTheDocument();
+      expect(
+        getElementByTestId(testId.passwordField.error),
+      ).toBeInTheDocument();
     });
 
-    test('when only the username is filled in', () => {
+    test('when only the username is filled in', async () => {
       const onSignIn = jest.fn<SignInData, [SignInData]>();
-      const {getByTestId, queryByTestId} = render(
+      render(
         <AuthDialog onClose={dummyFn} onSignIn={onSignIn} testId={testId} />,
       );
 
-      userEvent.type(getByTestId(testId.usernameField.input), 'username');
-      userEvent.click(getByTestId(testId.submitButton));
+      await userEvent.type(
+        getElementByTestId(testId.usernameField.input),
+        'username',
+      );
+      await userEvent.click(getElementByTestId(testId.submitButton));
 
       expect(onSignIn).toBeCalledTimes(0);
-      expect(queryByTestId(testId.usernameField.error)).not.toBeInTheDocument();
-      expect(getByTestId(testId.passwordField.error)).toBeInTheDocument();
+      expect(
+        queryElementByTestId(testId.usernameField.error),
+      ).not.toBeInTheDocument();
+      expect(
+        getElementByTestId(testId.passwordField.error),
+      ).toBeInTheDocument();
     });
 
-    test('when only the password is filled in', () => {
+    test('when only the password is filled in', async () => {
       const onSignIn = jest.fn<SignInData, [SignInData]>();
-      const {getByTestId, queryByTestId} = render(
+      render(
         <AuthDialog onClose={dummyFn} onSignIn={onSignIn} testId={testId} />,
       );
 
-      userEvent.type(getByTestId(testId.passwordField.input), 'password');
-      userEvent.click(getByTestId(testId.submitButton));
+      await userEvent.type(
+        getElementByTestId(testId.passwordField.input),
+        'password',
+      );
+      await userEvent.click(getElementByTestId(testId.submitButton));
 
       expect(onSignIn).toBeCalledTimes(0);
-      expect(queryByTestId(testId.passwordField.error)).not.toBeInTheDocument();
-      expect(getByTestId(testId.usernameField.error)).toBeInTheDocument();
+      expect(
+        queryElementByTestId(testId.passwordField.error),
+      ).not.toBeInTheDocument();
+      expect(
+        getElementByTestId(testId.usernameField.error),
+      ).toBeInTheDocument();
     });
 
-    test('when both fields are filled in', () => {
+    test('when both fields are filled in', async () => {
       const username = 'username';
       const password = 'password';
       const onSignIn = jest.fn<SignInData, [SignInData]>();
-      const {getByTestId, queryByTestId} = render(
+      render(
         <AuthDialog onClose={dummyFn} onSignIn={onSignIn} testId={testId} />,
       );
 
-      userEvent.type(getByTestId(testId.usernameField.input), username);
-      userEvent.type(getByTestId(testId.passwordField.input), password);
-      userEvent.click(getByTestId(testId.submitButton));
+      await userEvent.type(
+        getElementByTestId(testId.usernameField.input),
+        username,
+      );
+      await userEvent.type(
+        getElementByTestId(testId.passwordField.input),
+        password,
+      );
+      await userEvent.click(getElementByTestId(testId.submitButton));
 
       expect(onSignIn).toBeCalledTimes(1);
       expect(onSignIn).lastCalledWith({username, password});
-      expect(queryByTestId(testId.passwordField.error)).not.toBeInTheDocument();
-      expect(queryByTestId(testId.usernameField.error)).not.toBeInTheDocument();
+      expect(
+        queryElementByTestId(testId.passwordField.error),
+      ).not.toBeInTheDocument();
+      expect(
+        queryElementByTestId(testId.usernameField.error),
+      ).not.toBeInTheDocument();
     });
   });
 });
