@@ -1,5 +1,5 @@
 import React from 'react';
-import {createTestId, render} from 'lib/testing';
+import {createTestId, render, getElementByTestId} from 'lib/testing';
 import userEvent from '@testing-library/user-event';
 
 import {Dialog, DialogTitle, DialogContent, DialogActions} from './index';
@@ -18,11 +18,11 @@ function renderDialog({children = 'Content', ...restProps}: RenderProps) {
 }
 
 describe('Dialog', () => {
-  test('onClose', () => {
+  test('onClose', async () => {
     const onClose = jest.fn();
-    const {getByTestId} = render(renderDialog({onClose}));
+    render(renderDialog({onClose}));
 
-    userEvent.click(getByTestId(testId.scrim));
+    await userEvent.click(getElementByTestId(testId.scrim));
 
     expect(onClose).toBeCalledTimes(1);
   });
@@ -30,21 +30,21 @@ describe('Dialog', () => {
   describe('content without wrap', () => {
     test('is text', () => {
       const content = 'Content';
-      const {getByTestId} = render(renderDialog({children: content}));
+      render(renderDialog({children: content}));
 
-      expect(getByTestId(testId)).toHaveTextContent(content);
+      expect(getElementByTestId(testId)).toHaveTextContent(content);
     });
 
     test('is html', () => {
       const content = <span>Content</span>;
-      const {getByTestId} = render(renderDialog({children: content}));
+      render(renderDialog({children: content}));
 
-      expect(getByTestId(testId)).toContainHTML('<span>Content</span>');
+      expect(getElementByTestId(testId)).toContainHTML('<span>Content</span>');
     });
   });
 
   test('testId availability', () => {
-    const {getByTestId} = render(
+    render(
       <Dialog testId={testId}>
         <DialogTitle>Title</DialogTitle>
         <DialogContent>Content</DialogContent>
@@ -52,8 +52,8 @@ describe('Dialog', () => {
       </Dialog>,
     );
 
-    expect(getByTestId(testId.title)).toBeInTheDocument();
-    expect(getByTestId(testId.content)).toBeInTheDocument();
-    expect(getByTestId(testId.actions)).toBeInTheDocument();
+    expect(getElementByTestId(testId.title)).toBeInTheDocument();
+    expect(getElementByTestId(testId.content)).toBeInTheDocument();
+    expect(getElementByTestId(testId.actions)).toBeInTheDocument();
   });
 });
